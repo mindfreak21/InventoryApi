@@ -98,7 +98,7 @@ namespace InventoryApi.Controllers
             }
             catch (Exception e)
             {
-
+                string message = e.Message.ToString();
             }
 
             return usuario;
