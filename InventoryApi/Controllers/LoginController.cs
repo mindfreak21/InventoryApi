@@ -102,7 +102,8 @@ namespace InventoryApi.Controllers
             var claims = new[]
             {
                 new Claim(JwtRegisteredClaimNames.Sub,usuarioInfo.userName),
-                 new Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString())
+                new Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString())
+
             };
 
             var token = new JwtSecurityToken(
