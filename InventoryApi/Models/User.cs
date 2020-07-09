@@ -19,6 +19,11 @@ namespace InventoryApi.Models
         [MaxLength(255)]
         public string password { get; set; }
 
+        public int idRol { get; set; }
+
+        public string rolName { get; set; }
+
+        public Roles Roles { get; set; }
 
 
     }

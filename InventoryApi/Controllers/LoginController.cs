@@ -62,7 +62,20 @@ namespace InventoryApi.Controllers
 
             try
             {
-                var user = _context.userItems.Where(s => s.userName == login.userName);
+                //var user = _context.userItems.Where(s => s.userName == login.userName);
+                var user = (from _user in _context.userItems
+                            join _roles in _context.userRoles on _user.idRol equals _roles.idRol
+                            where _user.userName == login.userName
+                            select new
+                            {
+                                _user.id,
+                                _user.idRol,
+                                _user.userName,
+                                _user.password,
+                                _roles.roleName
+
+                            }
+                            );
 
                 if (user == null)
                 {
@@ -73,7 +86,7 @@ namespace InventoryApi.Controllers
                 {
                     if (login.userName == usuarios.userName && login.password == usuarios.password)
                     {
-                        usuario = new User { id = usuarios.id, userName = usuarios.userName, password = usuarios.password};
+                        usuario = new User { id = usuarios.id, userName = usuarios.userName, password = usuarios.password,rolName = usuarios.roleName};
                     }
                     else
                     {
@@ -102,7 +115,8 @@ namespace InventoryApi.Controllers
             var claims = new[]
             {
                 new Claim(JwtRegisteredClaimNames.Sub,usuarioInfo.userName),
-                new Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString())
+                new Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString()),
+                new Claim(ClaimTypes.Role,usuarioInfo.rolName)
 
             };
 
@@ -120,7 +134,7 @@ namespace InventoryApi.Controllers
 
         }
 
-        [Authorize]
+        [Authorize (Roles = "Employee")]
         [HttpPost]
         public string Post()
         {
@@ -131,7 +145,7 @@ namespace InventoryApi.Controllers
             return "Welcome to: " + userName;
         }
 
-        [Authorize]
+        [Authorize (Roles = "Administrador")]
         [HttpGet("GetValue")]
         public ActionResult<IEnumerable<string>> Get()
         {
