@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InventoryApi.Migrations
 {
     [DbContext(typeof(InventoryContext))]
-    [Migration("20200709061055_Role")]
-    partial class Role
+    [Migration("20200710011946_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -20,6 +20,31 @@ namespace InventoryApi.Migrations
                 .HasAnnotation("ProductVersion", "3.1.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("InventoryApi.Models.Item", b =>
+                {
+                    b.Property<int>("idItem")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
+                    b.Property<decimal>("quantityInStock")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("unitOfMeasure")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(15)")
+                        .HasMaxLength(15);
+
+                    b.HasKey("idItem");
+
+                    b.ToTable("itemCatalog");
+                });
 
             modelBuilder.Entity("InventoryApi.Models.Roles", b =>
                 {
@@ -57,7 +82,9 @@ namespace InventoryApi.Migrations
                         .HasMaxLength(255);
 
                     b.Property<string>("rolName")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
 
                     b.Property<string>("userName")
                         .IsRequired()

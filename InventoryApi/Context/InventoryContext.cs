@@ -17,6 +17,7 @@ namespace InventoryApi.Context
         //Creamos nuestros DBSet
         public DbSet<User> userItems { get; set; }
         public DbSet<Roles> userRoles { get; set; }
+        public DbSet<Item> itemCatalog { get; set; }
 
     }
 }

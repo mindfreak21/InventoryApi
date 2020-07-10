@@ -19,6 +19,31 @@ namespace InventoryApi.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("InventoryApi.Models.Item", b =>
+                {
+                    b.Property<int>("idItem")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
+                    b.Property<decimal>("quantityInStock")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("unitOfMeasure")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(15)")
+                        .HasMaxLength(15);
+
+                    b.HasKey("idItem");
+
+                    b.ToTable("itemCatalog");
+                });
+
             modelBuilder.Entity("InventoryApi.Models.Roles", b =>
                 {
                     b.Property<int>("idRol")
@@ -55,7 +80,9 @@ namespace InventoryApi.Migrations
                         .HasMaxLength(255);
 
                     b.Property<string>("rolName")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
 
                     b.Property<string>("userName")
                         .IsRequired()

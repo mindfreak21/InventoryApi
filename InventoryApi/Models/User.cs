@@ -21,6 +21,8 @@ namespace InventoryApi.Models
 
         public int idRol { get; set; }
 
+        [Required]
+        [MaxLength(50)]
         public string rolName { get; set; }
 
         public Roles Roles { get; set; }
