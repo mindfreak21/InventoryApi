@@ -4,14 +4,16 @@ using InventoryApi.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace InventoryApi.Migrations
 {
     [DbContext(typeof(InventoryContext))]
-    partial class InventoryContextModelSnapshot : ModelSnapshot
+    [Migration("20200710202534_Catalogs")]
+    partial class Catalogs
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -31,7 +33,12 @@ namespace InventoryApi.Migrations
                         .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
+                    b.Property<int?>("POHeaderidPO")
+                        .HasColumnType("int");
+
                     b.HasKey("idCustomer");
+
+                    b.HasIndex("POHeaderidPO");
 
                     b.ToTable("customerCatalog");
                 });
@@ -68,12 +75,6 @@ namespace InventoryApi.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("ItemidItem")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("POHeaderidPO")
-                        .HasColumnType("int");
-
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
@@ -81,10 +82,6 @@ namespace InventoryApi.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("idPODetails");
-
-                    b.HasIndex("ItemidItem");
-
-                    b.HasIndex("POHeaderidPO");
 
                     b.ToTable("PODetail");
                 });
@@ -96,20 +93,12 @@ namespace InventoryApi.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("CustomeridCustomer")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("OrderDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("StatusPurchaseOrderidStatus")
+                    b.Property<int?>("PODetailsidPODetails")
                         .HasColumnType("int");
 
                     b.HasKey("idPO");
 
-                    b.HasIndex("CustomeridCustomer");
-
-                    b.HasIndex("StatusPurchaseOrderidStatus");
+                    b.HasIndex("PODetailsidPODetails");
 
                     b.ToTable("POHeader");
                 });
@@ -138,12 +127,17 @@ namespace InventoryApi.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int?>("POHeaderidPO")
+                        .HasColumnType("int");
+
                     b.Property<string>("StatusName")
                         .IsRequired()
                         .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
                     b.HasKey("idStatus");
+
+                    b.HasIndex("POHeaderidPO");
 
                     b.ToTable("statusOrder");
                 });
@@ -183,26 +177,25 @@ namespace InventoryApi.Migrations
                     b.ToTable("userItems");
                 });
 
-            modelBuilder.Entity("InventoryApi.Models.PODetails", b =>
+            modelBuilder.Entity("InventoryApi.Models.Customer", b =>
                 {
-                    b.HasOne("InventoryApi.Models.Item", null)
-                        .WithMany("poDetails")
-                        .HasForeignKey("ItemidItem");
-
                     b.HasOne("InventoryApi.Models.POHeader", null)
-                        .WithMany("poDetails")
+                        .WithMany("customer")
                         .HasForeignKey("POHeaderidPO");
                 });
 
             modelBuilder.Entity("InventoryApi.Models.POHeader", b =>
                 {
-                    b.HasOne("InventoryApi.Models.Customer", null)
-                        .WithMany("PoHeader")
-                        .HasForeignKey("CustomeridCustomer");
+                    b.HasOne("InventoryApi.Models.PODetails", null)
+                        .WithMany("poHeader")
+                        .HasForeignKey("PODetailsidPODetails");
+                });
 
-                    b.HasOne("InventoryApi.Models.StatusPurchaseOrder", null)
-                        .WithMany("PoHeader")
-                        .HasForeignKey("StatusPurchaseOrderidStatus");
+            modelBuilder.Entity("InventoryApi.Models.StatusPurchaseOrder", b =>
+                {
+                    b.HasOne("InventoryApi.Models.POHeader", null)
+                        .WithMany("poStatus")
+                        .HasForeignKey("POHeaderidPO");
                 });
 
             modelBuilder.Entity("InventoryApi.Models.User", b =>

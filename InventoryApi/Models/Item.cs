@@ -22,5 +22,7 @@ namespace InventoryApi.Models
         [Required]
         [Range(0, 9999999999999999.99)]
         public decimal quantityInStock { get; set; }
+
+        public List<PODetails> poDetails { get; set; }
     }
 }

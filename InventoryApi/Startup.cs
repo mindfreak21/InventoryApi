@@ -1,6 +1,7 @@
 using System.Text;
 using InventoryApi.Context;
 using InventoryApi.Interfaces;
+using InventoryApi.Models;
 using InventoryApi.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -54,6 +55,8 @@ namespace InventoryApi
 
             //Inyectamos nuestras dependencias
             services.AddScoped<ICatalogItem, ItemRepository>();
+            services.AddScoped<IPOHeader, PoHeaderRepository>();
+
 
             services.AddControllers();
          

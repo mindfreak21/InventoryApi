@@ -18,6 +18,10 @@ namespace InventoryApi.Context
         public DbSet<User> userItems { get; set; }
         public DbSet<Roles> userRoles { get; set; }
         public DbSet<Item> itemCatalog { get; set; }
+        public DbSet<POHeader> POHeader { get; set; }
+        public DbSet<PODetails> PODetail { get; set; }
+        public  DbSet<Customer> customerCatalog { get; set; }
+        public DbSet<StatusPurchaseOrder> statusOrder { get; set; }
 
     }
 }

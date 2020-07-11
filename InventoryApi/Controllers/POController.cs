@@ -2,11 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using InventoryApi.Context;
 using InventoryApi.Interfaces;
 using InventoryApi.Models;
-using InventoryApi.Repositories;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,98 +11,107 @@ namespace InventoryApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ItemController : ControllerBase
+    public class POController : ControllerBase
     {
+        IPOHeader PoHeader;
 
-        ICatalogItem catalogItem;
-
-        public ItemController(ICatalogItem _catalogItem)
+        public POController(IPOHeader _PoHeader)
         {
-            catalogItem = _catalogItem;
+            PoHeader = _PoHeader;
         }
 
+
         [HttpGet]
-        [Route("GetItems")]
-        public async Task<IActionResult> GetItems()
+        [Route("GetHeader")]
+        public async Task<IActionResult> GetHeaders()
         {
-            var items = await catalogItem.GetItems();
+            var headers = await PoHeader.GetPOHeaders();
 
             try
             {
-                if (items == null)
+                if (headers == null)
                 {
                     return NotFound();
                 }
-
-
 
             } catch (Exception)
             {
                 BadRequest();
             }
 
-            return Ok(items);
 
+            return Ok(headers);
         }
 
         [HttpGet]
-        [Route("GetItem")]
-        public async Task<IActionResult> GetItem(int id)
+        [Route("GetHeaderById")]
+        public async Task<IActionResult> GetHeaderById(int id)
         {
-            var item = await catalogItem.GetItemById(id);
+            var headers = await PoHeader.GetPOHeaderById(id);
 
-            if (item == null)
+            try
             {
-                BadRequest(0);
+                if (headers == null)
+                {
+                    return NotFound();
+                }
+
+            }
+            catch (Exception)
+            {
+                BadRequest();
             }
 
-            return Ok(item);
+
+            return Ok(headers);
         }
 
 
         [HttpPost]
-        [Route("AddItem")]
-        [Authorize(Roles = "Administrador")]
-
-        public async Task<IActionResult> AddItem([FromBody]Item model)
+        [Route("AddPo")]
+        public async Task<IActionResult> AddPO([FromBody]POHeader header)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    var itemId = await catalogItem.AddItem(model);
+                    var headerId = await PoHeader.AddPOHeader(header);
 
-                    if (itemId > 0)
+                    if (headerId > 0)
                     {
-                        return Ok(itemId);
-                    } else
+                        return Ok(headerId);
+                    }
+                    else
                     {
                         return NotFound();
                     }
 
-                } catch (Exception)
+                }
+                catch (Exception)
                 {
                     return BadRequest();
                 }
             }
 
             return BadRequest();
+
         }
 
-        [HttpPost]
-        [Route("UpdateItem")]
-        [Authorize(Roles = "Administrador")]
-        public async Task<IActionResult> updateItem([FromBody]Item model)
+
+        [HttpPut]
+        [Route("UpdatePO")]
+        public async Task<IActionResult> UpdatePO([FromBody]POHeader header)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    await catalogItem.UpdateItem(model);
+                    await PoHeader.UpdatePOHeader(header);
 
                     return Ok();
 
-                } catch (Exception ex)
+                }
+                catch (Exception ex)
                 {
                     if (ex.GetType().FullName == "Microsoft.EntityFrameworkCore.DbUpdateConcurrencyException")
                     {
@@ -120,9 +126,8 @@ namespace InventoryApi.Controllers
         }
 
         [HttpDelete]
-        [Route("DeleteItem")]
-        [Authorize(Roles = "Administrador")]
-        public async Task<IActionResult> DeleteItem(int id)
+        [Route("DeletePO")]
+        public async Task<IActionResult> DeletePO(int id)
         {
             int result = 0;
 
@@ -133,7 +138,7 @@ namespace InventoryApi.Controllers
 
             try
             {
-                result = await catalogItem.DeleteItem(id);
+                result = await PoHeader.DeletePOHeader(id);
 
                 if (result == 0)
                 {
@@ -142,11 +147,11 @@ namespace InventoryApi.Controllers
 
                 return Ok();
 
-            } catch (Exception)
+            }
+            catch (Exception)
             {
                 return BadRequest();
             }
-
         }
 
     }
