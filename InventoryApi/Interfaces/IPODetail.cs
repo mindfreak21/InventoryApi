@@ -9,10 +9,9 @@ namespace InventoryApi.Interfaces
 {
    public interface IPODetail
     {
-        Task<IActionResult> GetDetailByOrder(int idOrden);
-        Task<string> AddDetailLine(PODetails detail);
+        Task<List<PoDetailTable>> GetDetailByOrder(int idOrden);
+        Task<int> AddDetailLine(PODetails detail);
         Task<int> DeleteDetailLine(int idOrdenDetalle);
         Task UpdateDetailLine(PODetails detail);
-
     }
 }

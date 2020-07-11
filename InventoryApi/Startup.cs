@@ -56,6 +56,7 @@ namespace InventoryApi
             //Inyectamos nuestras dependencias
             services.AddScoped<ICatalogItem, ItemRepository>();
             services.AddScoped<IPOHeader, PoHeaderRepository>();
+            services.AddScoped<IPODetail, POLineRepository>();
 
 
             services.AddControllers();
