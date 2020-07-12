@@ -49,7 +49,7 @@ namespace InventoryApi.Controllers
             {
 
                 LogTraceFactory.LogError($"Parametros incorrectos");
-                return BadRequest(new ErrorDetails { statusCode = Convert.ToInt32(HttpStatusCode.BadRequest), message = $"Usuario o password invalidos" });
+                return BadRequest(new ErrorDetails { statusCode = Convert.ToInt32(HttpStatusCode.Unauthorized), message = $"Usuario o password invalidos" });
 
             }
 
@@ -62,7 +62,7 @@ namespace InventoryApi.Controllers
 
             try
             {
-                //var user = _context.userItems.Where(s => s.userName == login.userName);
+             
                 var user = (from _user in _context.userItems
                             join _roles in _context.userRoles on _user.idRol equals _roles.idRol
                             where _user.userName == login.userName

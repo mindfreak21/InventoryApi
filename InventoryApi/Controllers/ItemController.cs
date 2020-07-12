@@ -7,6 +7,7 @@ using InventoryApi.Interfaces;
 using InventoryApi.Models;
 using InventoryApi.Repositories;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -26,6 +27,7 @@ namespace InventoryApi.Controllers
 
         [HttpGet]
         [Route("GetItems")]
+
         public async Task<IActionResult> GetItems()
         {
             var items = await catalogItem.GetItems();
@@ -65,7 +67,7 @@ namespace InventoryApi.Controllers
 
         [HttpPost]
         [Route("AddItem")]
-        [Authorize(Roles = "Administrador")]
+       // [Authorize(Roles = "Administrador")]
 
         public async Task<IActionResult> AddItem([FromBody]Item model)
         {
@@ -92,9 +94,9 @@ namespace InventoryApi.Controllers
             return BadRequest();
         }
 
-        [HttpPost]
+        [HttpPut]
         [Route("UpdateItem")]
-        [Authorize(Roles = "Administrador")]
+        //[Authorize(Roles = "Administrador")]
         public async Task<IActionResult> updateItem([FromBody]Item model)
         {
             if (ModelState.IsValid)
@@ -121,7 +123,7 @@ namespace InventoryApi.Controllers
 
         [HttpDelete]
         [Route("DeleteItem")]
-        [Authorize(Roles = "Administrador")]
+        //[Authorize(Roles = "Administrador")]
         public async Task<IActionResult> DeleteItem(int id)
         {
             int result = 0;

@@ -28,9 +28,17 @@ namespace InventoryApi
         {
             //Configurando el Cors
             //Agregamos y configuramos el Cors
-            services.AddCors(options => {
-                options.AddPolicy("CorsPolicy", builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader().AllowCredentials().Build());
+            services.AddCors(options =>
+            {
+                //Definicion del Cors
+                options.AddPolicy("default", policy =>
+                {
+                    policy.WithOrigins("http://localhost:4200/")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                });
             });
+
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                     .AddJwtBearer(options =>
@@ -60,6 +68,8 @@ namespace InventoryApi
 
 
             services.AddControllers();
+            
+           
          
         }
 
@@ -74,6 +84,10 @@ namespace InventoryApi
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors(builder => builder.WithOrigins("http://localhost:4200")
+                              .AllowAnyMethod()
+                              .AllowAnyHeader());
 
             app.UseAuthentication();
 
